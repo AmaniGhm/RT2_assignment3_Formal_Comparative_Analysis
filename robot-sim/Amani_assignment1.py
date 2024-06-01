@@ -112,7 +112,7 @@ def displace_token():
 
 		if -a_th <= rot_y <= a_th:
 		    print("Ah, that'll do.")
-		    drive(25, 0.5)
+		    drive(50, 1)
 		elif rot_y < -a_th:
 		    print("Left a bit...")
 		    turn(-2, 0.5)
@@ -122,8 +122,8 @@ def displace_token():
 		displace_token()
     else:
         print("I don't see the ref token")
-        drive(10, 1)
-        turn(10, 1)
+        drive(10, 0.5)
+        turn(15, 1)
         displace_token()
 
 
@@ -136,6 +136,7 @@ save_reference_token()
 
 print("The reference token is:", reference_token)
 
+start_time = time.time() 
 while True:
     
     token, dist, rot_y = find_token()
@@ -158,7 +159,7 @@ while True:
 
     if -a_th <= rot_y <= a_th:
         print("Ah, that'll do.")
-        drive(25, 0.5)
+        drive(50, 1)
     elif rot_y < -a_th:
         print("Left a bit...")
         turn(-2, 0.5)
@@ -167,4 +168,8 @@ while True:
         turn(2, 0.5)
     if len(picked_up_markers) == 5:
     	print("AAAAND I'm done! Finally time to rest")
+        end_time = time.time() 
     	break
+
+elapsed_time = end_time - start_time
+print(elapsed_time)
