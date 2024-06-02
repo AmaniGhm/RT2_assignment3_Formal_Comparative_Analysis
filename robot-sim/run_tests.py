@@ -4,8 +4,8 @@ import sys
 import os
 import uuid
 
-script_to_run = "run_simulator.py"
-assignment_script = "assignment.py"
+script_to_run = "run.py"
+assignment_script = "Amani_assignment1.py"
 config_file = "games/two_colours_assignment.yaml"
 
 # Check if the number of tests is provided as a command-line argument
@@ -19,8 +19,8 @@ except ValueError:
     print("Number of tests must be an integer.")
     sys.exit(1)
 
-# Create a directory named "logs" if it doesn't exist
-log_directory = "logs"
+# Create a directory named "test_logs" if it doesn't exist
+log_directory = "test_logs"
 if not os.path.exists(log_directory):
     os.makedirs(log_directory)
 filename = os.path.join(log_directory, f"execution_log_{uuid.uuid4()}.txt")
@@ -33,7 +33,7 @@ for i in range(num_tests):
     try:
         # Run the simulator script using subprocess with a timeout
         result = subprocess.run(
-            ["python3", script_to_run, "-c", config_file, assignment_script],
+            ["python2", script_to_run, "-c", config_file, assignment_script],
             capture_output=True,
             text=True,
             timeout= 240 # Set a timeout of 240 seconds (4 mins) or adjust as needed

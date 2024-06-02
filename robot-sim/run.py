@@ -2,8 +2,21 @@
 import yaml
 import threading
 import argparse
+import sys
+import signal
+import os
 
 from sr.robot import *
+
+def shutdown_simulator(signal_received=None, frame=None):
+    """Shutdown the simulator and join all threads."""
+    global sim, threads
+    print("Shutting down the simulator...")
+    if sim:
+        sim.running = False  # Assuming setting running to False will stop the simulator
+    for thread in threads:
+        thread.join()
+    sys.exit(0)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--config',
@@ -53,6 +66,10 @@ for zone, robot in enumerate(robot_scripts):
     thread = RobotThread(zone, robot)
     thread.start()
     threads.append(thread)
+
+# Create PID file early in the script
+with open('run_pid.txt', 'w') as f:
+    f.write(str(os.getpid()))
 
 sim.run()
 

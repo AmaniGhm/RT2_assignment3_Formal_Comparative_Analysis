@@ -1,10 +1,23 @@
 from __future__ import print_function
 import time
+import sys
+import token
+import os
+import signal
 from sr.robot import *
+
+""" A funtion to help simulate the code multiple times """
+def send_signal_to_run():
+    # Read the PID of run.py from the file
+    with open('run_pid.txt', 'r') as f:
+        run_pid = int(f.read().strip())
+
+    # Send a signal to run.py to shut it down
+    os.kill(run_pid, signal.SIGTERM)
 
 """ Initialisation of the list of markers the robot has already picked"""
 
-picked_up_markers = []
+picked_up_markers = [] 
 
 """ reference token is the token the robot is programmed to gather the rest of the tokens at"""
 
@@ -112,7 +125,7 @@ def displace_token():
 
 		if -a_th <= rot_y <= a_th:
 		    print("Ah, that'll do.")
-		    drive(50, 1)
+		    drive(500, 0.5)
 		elif rot_y < -a_th:
 		    print("Left a bit...")
 		    turn(-2, 0.5)
@@ -159,7 +172,7 @@ while True:
 
     if -a_th <= rot_y <= a_th:
         print("Ah, that'll do.")
-        drive(50, 1)
+        drive(500, 0.5)
     elif rot_y < -a_th:
         print("Left a bit...")
         turn(-2, 0.5)
@@ -169,7 +182,8 @@ while True:
     if len(picked_up_markers) == 5:
     	print("AAAAND I'm done! Finally time to rest")
         end_time = time.time() 
+        send_signal_to_run()
+        sys.exit() 
     	break
 
-elapsed_time = end_time - start_time
-print(elapsed_time)
+

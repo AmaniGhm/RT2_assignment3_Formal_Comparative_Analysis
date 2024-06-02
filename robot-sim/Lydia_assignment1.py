@@ -3,6 +3,14 @@ from __future__ import print_function
 import time
 from sr.robot import *
 
+""" A funtion to help simulate the code multiple times """
+def send_signal_to_run():
+    # Read the PID of run.py from the file
+    with open('run_pid.txt', 'r') as f:
+        run_pid = int(f.read().strip())
+
+    # Send a signal to run.py to shut it down
+    os.kill(run_pid, signal.SIGTERM)
 
 a_th = 2.0
 """ float: Threshold for the control of the linear distance"""
@@ -156,7 +164,10 @@ while 1:
                 print("All boxes are put together!")
                 turn(+10, 1)
                 drive(-10, 1)
-                exit()
+                end_time = time.time() 
+        	send_signal_to_run()
+        	sys.exit()
+                
 	else:
             print("Aww, I'm not close enough.")
     elif -a_th<= rot_y <= a_th: # if the robot is well aligned with the token, we go forward
